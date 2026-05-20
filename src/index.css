@@ -1,8 +1,8 @@
 /* PinNut MVP Palette & Base Styles */
 :root {
-    --bg-primary: #CFCFCF;
-    --text-primary: #7F49B4;
-    --ui-border: #141414;
+    --bg-primary: #141414;
+    --text-primary: #CFCFCF ;
+    --ui-border: #7F49B4 ;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     --font-main: system-ui, -apple-system, sans-serif;
 }
