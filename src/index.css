@@ -1,0 +1,94 @@
+/* PinNut MVP Palette & Base Styles */
+:root {
+    --bg-primary: #CFCFCF;
+    --text-primary: #7F49B4;
+    --ui-border: #141414;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --font-main: system-ui, -apple-system, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+#root {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Базовые кнопки */
+button {
+    cursor: pointer;
+    border: 2px solid var(--ui-border);
+    background: transparent;
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+button:hover {
+    background: var(--ui-border);
+    color: var(--bg-primary);
+}
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Поля ввода */
+input, textarea, select {
+    border: 2px solid var(--ui-border);
+    background: #ffffff;
+    color: var(--text-primary);
+    padding: 10px;
+    border-radius: 6px;
+    font-family: inherit;
+    width: 100%;
+    font-size: 0.95rem;
+}
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--text-primary);
+    box-shadow: 0 0 0 3px rgba(127, 73, 180, 0.2);
+}
+
+/* Сетка для карточек (используется в NoteList) */
+.notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+}
+
+/* Бейджи тегов */
+.tag {
+    display: inline-block;
+    background: rgba(127, 73, 180, 0.15);
+    color: var(--text-primary);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-right: 4px;
+    margin-top: 4px;
+}
