@@ -15,15 +15,17 @@ interface Props {
 
 function NoteCard({ note, onTogglePin, onDelete }: Props) {
     const [now, setNow] = useState(Date.now)
+    const hasDeadline = !!note.deadline
 
     useEffect(() => {
-        const timer = setInterval(() => setNow(Date.now()), 500)
+        if (!hasDeadline) return
+        const timer = setInterval(() => setNow(Date.now()), 1000)
         return () => clearInterval(timer)
-    }, [])
+    }, [hasDeadline])
 
     const isUrgent = useMemo(() =>
-            new Date(note.deadline).getTime() - now < 24 * 60 * 60 * 1000,
-        [note.deadline, now]
+            hasDeadline && new Date(note.deadline).getTime() - now < 24 * 60 * 60 * 1000,
+        [hasDeadline, note.deadline, now]
     )
 
     const indicatorColor = useMemo(() => getTimeIndicator(note.deadline, now), [note.deadline, now])
@@ -44,7 +46,9 @@ function NoteCard({ note, onTogglePin, onDelete }: Props) {
 
     return (
         <div className="note-card" style={{ background: note.color }}>
-            <div className="note-card__indicator" style={{ background: indicatorColor }} />
+            {hasDeadline && (
+                <div className="note-card__indicator" style={{ background: indicatorColor }} />
+            )}
 
             <p className="note-card__text" style={{ color: isUrgent ? 'var(--indicator-red)' : 'var(--text-primary)' }}>
                 {note.text}
@@ -57,14 +61,18 @@ function NoteCard({ note, onTogglePin, onDelete }: Props) {
             </div>
 
             <span className="note-card__priority">{priorityLabels[note.priority]}</span>
-            <span className="note-card__deadline">{deadlineText}</span>
 
-            <div style={{ background: 'rgba(0,0,0,0.15)', borderRadius: '2px', height: '4px' }}>
-                <div
-                    className="note-card__progress"
-                    style={{ width: `${progressPercent}%`, background: progressColor }}
-                />
-            </div>
+            {hasDeadline && (
+                <>
+                    <span className="note-card__deadline">{deadlineText}</span>
+                    <div style={{ background: 'rgba(0,0,0,0.15)', borderRadius: '2px', height: '4px' }}>
+                        <div
+                            className="note-card__progress"
+                            style={{ width: `${progressPercent}%`, background: progressColor }}
+                        />
+                    </div>
+                </>
+            )}
 
             <div className="note-card__actions">
                 <button className="note-card__btn" onClick={() => onTogglePin(note.id)}>
