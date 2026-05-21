@@ -1,4 +1,6 @@
 /* PinNut MVP Palette & Base Styles */
+@import './styles/NoteCard.css';
+
 :root {
     --bg-primary: #141414;
     --text-primary: #CFCFCF ;
