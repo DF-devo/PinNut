@@ -4,6 +4,7 @@ import { useNoteStore } from './store/useNoteStore'
 import NoteForm from './components/NoteForm'
 import FilterBar from './components/FilterBar'
 import { NoteList } from './components/NoteList'
+import Modal from './components/Modal'
 import type { SortOption } from './types'
 import './App.css'
 
@@ -12,6 +13,7 @@ function App() {
     const [sortOption, setSortOption] = useState<SortOption>('date')
     const [activeTag, setActiveTag] = useState<string | null>(null)
     const [showForm, setShowForm] = useState(false)
+    const [showSettings, setShowSettings] = useState(false)
 
     const filteredNotes = activeTag
         ? notes.filter(n => n.tags.includes(activeTag))
@@ -30,23 +32,14 @@ function App() {
                         <option value="date">По дате</option>
                         <option value="priority">По приоритету</option>
                     </select>
-                    <button className="app-header__btn-settings">⚙️</button>
-                    <button
-                        className="app-header__btn-add"
-                        onClick={() => setShowForm(f => !f)}
-                    >
-                        {showForm ? '✕ Закрыть' : '+ Заметка'}
+                    <button className="app-header__btn-settings" onClick={() => setShowSettings(true)}>⚙️</button>
+                    <button className="app-header__btn-add" onClick={() => setShowForm(true)}>
+                        + Заметка
                     </button>
                 </div>
             </header>
 
             <main className="app-main">
-                <section className="form-section">
-                    {showForm && (
-                        <NoteForm onAdd={(data: Parameters<typeof addNote>[0]) => { addNote(data); setShowForm(false) }} />
-                    )}
-                </section>
-
                 <section className="filters-section">
                     <FilterBar activeTag={activeTag} onTagToggle={tag => setActiveTag(t => t === tag ? null : tag)} />
                 </section>
@@ -60,6 +53,24 @@ function App() {
                     />
                 </section>
             </main>
+
+            {showForm && (
+                <Modal title="Новая заметка" onClose={() => setShowForm(false)}>
+                    <NoteForm onAdd={(data: Parameters<typeof addNote>[0]) => { addNote(data); setShowForm(false) }} />
+                </Modal>
+            )}
+
+            {showSettings && (
+                <Modal title="Настройки" onClose={() => setShowSettings(false)}>
+                    <div className="settings-placeholder">
+                        <div className="settings-gears">
+                            <span className="gear-1">⚙️</span>
+                            <span className="gear-2">⚙️</span>
+                        </div>
+                        <p>Пока в разработке</p>
+                    </div>
+                </Modal>
+            )}
         </div>
     )
 }

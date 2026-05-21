@@ -10,7 +10,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ onAdd }) => {
   const [tagsInput, setTagsInput] = useState('');
   const [priority, setPriority] = useState<Priority>('medium');
   const [deadline, setDeadline] = useState('');
-  const [color, setColor] = useState('#CFCFCF');
+  const [color, setColor] = useState('#7F49B4');
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -33,7 +33,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ onAdd }) => {
       tags,
       color,
       priority,
-      deadline: deadline || new Date().toISOString().slice(0, 16),
+      deadline: deadline,
     });
 
     // Очистка формы
@@ -41,7 +41,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ onAdd }) => {
     setTagsInput('');
     setPriority('medium');
     setDeadline('');
-    setColor('#CFCFCF');
+    setColor('#7F49B4');
   };
 
   const formStyle: React.CSSProperties = {
