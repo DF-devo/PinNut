@@ -23,13 +23,18 @@ function App() {
                 <h1 className="app-title">🥜 PinNut</h1>
                 <div className="app-header__controls">
                     <select
+                        className="app-header__select"
                         value={sortOption}
                         onChange={e => setSortOption(e.target.value as SortOption)}
                     >
                         <option value="date">По дате</option>
                         <option value="priority">По приоритету</option>
                     </select>
-                    <button onClick={() => setShowForm(f => !f)}>
+                    <button className="app-header__btn-settings">⚙️</button>
+                    <button
+                        className="app-header__btn-add"
+                        onClick={() => setShowForm(f => !f)}
+                    >
                         {showForm ? '✕ Закрыть' : '+ Заметка'}
                     </button>
                 </div>
