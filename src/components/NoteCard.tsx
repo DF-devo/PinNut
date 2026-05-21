@@ -1,4 +1,6 @@
-import { useMemo } from 'react'
+// Компонент одной карточки
+
+import { useMemo, useEffect, useState } from 'react'
 import type { Note } from '../types'
 import { getTimeIndicator } from '../utils/getTimeIndicator'
 import { getProgressColor } from '../utils/getProgressColor'
@@ -12,20 +14,27 @@ interface Props {
 }
 
 function NoteCard({ note, onTogglePin, onDelete }: Props) {
+    const [now, setNow] = useState(Date.now)
+
+    useEffect(() => {
+        const timer = setInterval(() => setNow(Date.now()), 500)
+        return () => clearInterval(timer)
+    }, [])
+
     const isUrgent = useMemo(() =>
-            new Date(note.deadline).getTime() - Date.now() < 24 * 60 * 60 * 1000,
-        [note.deadline]
+            new Date(note.deadline).getTime() - now < 24 * 60 * 60 * 1000,
+        [note.deadline, now]
     )
 
-    const indicatorColor = getTimeIndicator(note.deadline)
-    const progressColor = getProgressColor(note.createdAt, note.deadline)
-    const deadlineText = formatDeadline(note.deadline)
+    const indicatorColor = useMemo(() => getTimeIndicator(note.deadline, now), [note.deadline, now])
+    const progressColor = useMemo(() => getProgressColor(note.createdAt, note.deadline, now), [note.createdAt, note.deadline, now])
+    const deadlineText = useMemo(() => formatDeadline(note.deadline, now), [note.deadline, now])
 
     const progressPercent = useMemo(() => {
         const total = new Date(note.deadline).getTime() - note.createdAt
-        const elapsed = Date.now() - note.createdAt
+        const elapsed = now - note.createdAt
         return Math.min(Math.max(elapsed / total * 100, 0), 100)
-    }, [note.deadline, note.createdAt])
+    }, [note.deadline, note.createdAt, now])
 
     const priorityLabels = {
         low: 'Низкий',
@@ -35,10 +44,7 @@ function NoteCard({ note, onTogglePin, onDelete }: Props) {
 
     return (
         <div className="note-card" style={{ background: note.color }}>
-            <div
-                className="note-card__indicator"
-                style={{ background: indicatorColor }}
-            />
+            <div className="note-card__indicator" style={{ background: indicatorColor }} />
 
             <p className="note-card__text" style={{ color: isUrgent ? 'var(--indicator-red)' : 'var(--text-primary)' }}>
                 {note.text}
@@ -51,16 +57,12 @@ function NoteCard({ note, onTogglePin, onDelete }: Props) {
             </div>
 
             <span className="note-card__priority">{priorityLabels[note.priority]}</span>
-
             <span className="note-card__deadline">{deadlineText}</span>
 
             <div style={{ background: 'rgba(0,0,0,0.15)', borderRadius: '2px', height: '4px' }}>
                 <div
                     className="note-card__progress"
-                    style={{
-                        width: `${progressPercent}%`,
-                        background: progressColor
-                    }}
+                    style={{ width: `${progressPercent}%`, background: progressColor }}
                 />
             </div>
 

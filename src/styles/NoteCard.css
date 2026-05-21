@@ -30,6 +30,7 @@
     font-size: 0.95rem;
     line-height: 1.5;
     word-break: break-word;
+    white-space: pre-wrap;
 }
 
 .note-card__tags {
@@ -76,4 +77,10 @@
 
 .note-card__btn:hover {
     background: rgba(0, 0, 0, 0.1);
+}
+
+.note-card__actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
 }
