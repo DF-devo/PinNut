@@ -1,3 +1,5 @@
+
+// Индикатор важности заметки
 export function getTimeIndicator(deadline: string): string {
     const timeLeft = new Date(deadline).getTime() - Date.now()
 
