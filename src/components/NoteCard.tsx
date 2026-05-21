@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import type { Note } from '../types'
+import { getTimeIndicator } from '../utils/getTimeIndicator'
 
 interface Props {
     note: Note
@@ -13,14 +14,27 @@ function NoteCard({ note, onTogglePin, onDelete }: Props) {
         [note.deadline]
     )
 
+    const indicatorColor = getTimeIndicator(note.deadline)
+
     return (
         <div style={{
             background: note.color,
             padding: '16px',
             borderRadius: '12px',
-            width: '280px'
+            width: '280px',
+            position: 'relative'
         }}>
-            <p style={{ color: isUrgent ? '#e53e3e' : 'var(--text-primary)' }}>
+            <div style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                background: indicatorColor,
+                position: 'absolute',
+                top: '12px',
+                right: '12px'
+            }} />
+
+            <p style={{ color: isUrgent ? 'var(--indicator-red)' : 'var(--text-primary)' }}>
                 {note.text}
             </p>
 
