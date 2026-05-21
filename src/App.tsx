@@ -1,8 +1,7 @@
 import { NoteForm } from './components/NoteForm';
 import { FilterBar } from './components/FilterBar';
 import { NoteList } from './components/NoteList';
-import { useNotesStore } from './store/useNotesStore';
-import './App.css';
+import { useNoteStore } from './store/useNoteStore';
 
 function App() {
     const { addNote } = useNotesStore();
