@@ -21,6 +21,12 @@ function NoteCard({ note, onTogglePin, onDelete }: Props) {
     const progressColor = getProgressColor(note.createdAt, note.deadline)
     const deadlineText = formatDeadline(note.deadline)
 
+    const progressPercent = useMemo(() => {
+        const total = new Date(note.deadline).getTime() - note.createdAt
+        const elapsed = Date.now() - note.createdAt
+        return Math.min(Math.max(elapsed / total * 100, 0), 100)
+    }, [note.deadline, note.createdAt])
+
     const priorityLabels = {
         low: 'Низкий',
         medium: 'Средний',
@@ -48,10 +54,15 @@ function NoteCard({ note, onTogglePin, onDelete }: Props) {
 
             <span className="note-card__deadline">{deadlineText}</span>
 
-            <div
-                className="note-card__progress"
-                style={{ background: progressColor }}
-            />
+            <div style={{ background: 'rgba(0,0,0,0.15)', borderRadius: '2px', height: '4px' }}>
+                <div
+                    className="note-card__progress"
+                    style={{
+                        width: `${progressPercent}%`,
+                        background: progressColor
+                    }}
+                />
+            </div>
 
             <div className="note-card__actions">
                 <button className="note-card__btn" onClick={() => onTogglePin(note.id)}>
