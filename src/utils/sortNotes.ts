@@ -1,3 +1,5 @@
+// функция сортировки заметки
+
 import type { Note } from '../types'
 
 export function sortNotes(notes: Note[], option: 'date' | 'priority'): Note[] {
