@@ -4,7 +4,7 @@ import { NoteList } from './components/NoteList';
 import { useNoteStore } from './store/useNoteStore';
 
 function App() {
-    const { addNote } = useNotesStore();
+    const { addNote } = useNoteStore();
 
     return (
         <div className="app-container">
