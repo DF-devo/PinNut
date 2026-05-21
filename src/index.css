@@ -1,10 +1,16 @@
 /* PinNut MVP Palette & Base Styles */
+@import './styles/NoteCard.css';
+
 :root {
-    --bg-primary: #CFCFCF;
-    --text-primary: #7F49B4;
-    --ui-border: #141414;
+    --bg-primary: #141414;
+    --text-primary: #CFCFCF ;
+    --ui-border: #7F49B4 ;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     --font-main: system-ui, -apple-system, sans-serif;
+    --indicator-green: #48bb78;
+    --indicator-yellow: #f6ad55;
+    --indicator-red: #e53e3e;
+    --indicator-gray: #808080;
 }
 
 * {
@@ -92,3 +98,4 @@ input:focus, textarea:focus, select:focus {
     margin-right: 4px;
     margin-top: 4px;
 }
+
