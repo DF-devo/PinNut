@@ -1,3 +1,4 @@
+
 // Корневой компонент: сборка NoteForm, FilterBar, NoteList, управление стейтом
 import { useState } from 'react'
 import { useNoteStore } from './store/useNoteStore'
@@ -75,4 +76,5 @@ function App() {
     )
 }
 
-export default App
+
+export default App;
