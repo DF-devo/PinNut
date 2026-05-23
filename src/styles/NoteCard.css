@@ -66,17 +66,17 @@
 }
 
 .note-card__btn {
-    background: transparent;
+    background: rgba(0, 0, 0, 0.12);
     border: none;
     cursor: pointer;
     font-size: 1rem;
-    padding: 4px;
-    border-radius: 4px;
+    padding: 4px 8px;
+    border-radius: 6px;
     transition: background 0.2s;
 }
 
 .note-card__btn:hover {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.25);
 }
 
 .note-card__actions {
