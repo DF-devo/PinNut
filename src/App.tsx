@@ -1,11 +1,11 @@
-
 // Корневой компонент: сборка NoteForm, FilterBar, NoteList, управление стейтом
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNoteStore } from './store/useNoteStore'
 import NoteForm from './components/NoteForm'
 import FilterBar from './components/FilterBar'
 import { NoteList } from './components/NoteList'
 import Modal from './components/Modal'
+import OfflineOverlay from './components/OfflineOverlay'
 import type { Note, SortOption } from './types'
 import './App.css'
 
@@ -16,6 +16,19 @@ function App() {
     const [showForm, setShowForm] = useState(false)
     const [showSettings, setShowSettings] = useState(false)
     const [editingNote, setEditingNote] = useState<Note | null>(null)
+    const [isOffline, setIsOffline] = useState(!navigator.onLine)
+
+    useEffect(() => {
+        const onOffline = () => setIsOffline(true)
+        const onOnline  = () => setIsOffline(false)
+        window.addEventListener('offline', onOffline)
+        window.addEventListener('online',  onOnline)
+        return () => {
+            window.removeEventListener('offline', onOffline)
+            window.removeEventListener('online',  onOnline)
+        }
+    }, [])
+
     const handleDelete = (id: string) => {
         if (activeTag) {
             const stillExists = notes
@@ -95,9 +108,10 @@ function App() {
                     </div>
                 </Modal>
             )}
+
+            {isOffline && <OfflineOverlay />}
         </div>
     )
 }
 
-
-export default App;
+export default App

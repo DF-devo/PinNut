@@ -4,6 +4,7 @@
 @import './styles/Modal.css';
 @import './styles/NoteForm.css';
 @import './styles/FilterBar.css';
+@import './styles/OfflineOverlay.css';
 
 :root {
     --bg-primary: #141414;
