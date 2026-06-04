@@ -15,7 +15,11 @@ export const NoteList = ({ notes, sortOption, onTogglePin, onDelete }: Props) =>
     const unpinned = notes.filter(n => !n.pinned)
 
     const sorted = [
-        ...pinned.sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()),
+        ...pinned.sort((a, b) => {
+            const aTime = a.deadline ? new Date(a.deadline).getTime() : Infinity
+            const bTime = b.deadline ? new Date(b.deadline).getTime() : Infinity
+            return aTime - bTime
+        }),
         ...sortNotes(unpinned, sortOption),
     ]
 
