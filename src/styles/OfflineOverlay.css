@@ -1,0 +1,50 @@
+.offline-overlay {
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(20, 20, 20, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: overlay-in 0.4s ease forwards;
+}
+
+.offline-overlay__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+    animation: corgi-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+}
+
+.offline-overlay__gif {
+    width: 200px;
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.offline-overlay__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.offline-overlay__text {
+    font-size: 0.9rem;
+    opacity: 0.5;
+    max-width: 260px;
+    line-height: 1.5;
+}
+
+@keyframes overlay-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes corgi-in {
+    from { transform: scale(0.75) translateY(24px); opacity: 0; }
+    to   { transform: scale(1)    translateY(0);    opacity: 1; }
+}

@@ -1,20 +1,43 @@
-
 // Корневой компонент: сборка NoteForm, FilterBar, NoteList, управление стейтом
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNoteStore } from './store/useNoteStore'
 import NoteForm from './components/NoteForm'
 import FilterBar from './components/FilterBar'
 import { NoteList } from './components/NoteList'
 import Modal from './components/Modal'
-import type { SortOption } from './types'
+import OfflineOverlay from './components/OfflineOverlay'
+import type { Note, SortOption } from './types'
 import './App.css'
 
 function App() {
-    const { notes, addNote, togglePin, deleteNote } = useNoteStore()
+    const { notes, addNote, updateNote, togglePin, deleteNote } = useNoteStore()
     const [sortOption, setSortOption] = useState<SortOption>('date')
     const [activeTag, setActiveTag] = useState<string | null>(null)
     const [showForm, setShowForm] = useState(false)
     const [showSettings, setShowSettings] = useState(false)
+    const [editingNote, setEditingNote] = useState<Note | null>(null)
+    const [isOffline, setIsOffline] = useState(!navigator.onLine)
+
+    useEffect(() => {
+        const onOffline = () => setIsOffline(true)
+        const onOnline  = () => setIsOffline(false)
+        window.addEventListener('offline', onOffline)
+        window.addEventListener('online',  onOnline)
+        return () => {
+            window.removeEventListener('offline', onOffline)
+            window.removeEventListener('online',  onOnline)
+        }
+    }, [])
+
+    const handleDelete = (id: string) => {
+        if (activeTag) {
+            const stillExists = notes
+                .filter(n => n.id !== id)
+                .some(n => n.tags.includes(activeTag))
+            if (!stillExists) setActiveTag(null)
+        }
+        deleteNote(id)
+    }
 
     const filteredNotes = activeTag
         ? notes.filter(n => n.tags.includes(activeTag))
@@ -50,7 +73,8 @@ function App() {
                         notes={filteredNotes}
                         sortOption={sortOption}
                         onTogglePin={togglePin}
-                        onDelete={deleteNote}
+                        onDelete={handleDelete}
+                        onEdit={note => setEditingNote(note)}
                     />
                 </section>
             </main>
@@ -58,6 +82,18 @@ function App() {
             {showForm && (
                 <Modal title="Новая заметка" onClose={() => setShowForm(false)}>
                     <NoteForm onAdd={(data: Parameters<typeof addNote>[0]) => { addNote(data); setShowForm(false) }} />
+                </Modal>
+            )}
+
+            {editingNote && (
+                <Modal title="Редактировать заметку" onClose={() => setEditingNote(null)}>
+                    <NoteForm
+                        initialData={editingNote}
+                        onAdd={(data: Parameters<typeof addNote>[0]) => {
+                            updateNote(editingNote.id, data)
+                            setEditingNote(null)
+                        }}
+                    />
                 </Modal>
             )}
 
@@ -72,9 +108,10 @@ function App() {
                     </div>
                 </Modal>
             )}
+
+            {isOffline && <OfflineOverlay />}
         </div>
     )
 }
 
-
-export default App;
+export default App
