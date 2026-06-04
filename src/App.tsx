@@ -6,6 +6,7 @@ import FilterBar from './components/FilterBar'
 import { NoteList } from './components/NoteList'
 import Modal from './components/Modal'
 import OfflineOverlay from './components/OfflineOverlay'
+import corgiGif from './assets/corgi.gif'
 import type { Note, SortOption } from './types'
 import './App.css'
 
@@ -17,6 +18,10 @@ function App() {
     const [showSettings, setShowSettings] = useState(false)
     const [editingNote, setEditingNote] = useState<Note | null>(null)
     const [isOffline, setIsOffline] = useState(!navigator.onLine)
+
+    useEffect(() => {
+        new Image().src = corgiGif
+    }, [])
 
     useEffect(() => {
         const onOffline = () => setIsOffline(true)
