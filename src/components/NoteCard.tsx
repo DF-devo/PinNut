@@ -5,7 +5,6 @@ import { useNoteStore } from '../store/useNoteStore'
 import { getTimeIndicator } from '../utils/getTimeIndicator'
 import { getProgressColor } from '../utils/getProgressColor'
 import { formatDeadline } from '../utils/formatDeadline'
-import { sortItems } from '../utils/checklistUtils'
 import '../styles/NoteCard.css'
 
 interface Props {

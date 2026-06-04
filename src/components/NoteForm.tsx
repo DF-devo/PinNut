@@ -87,19 +87,16 @@ const NoteForm: React.FC<NoteFormProps> = ({ onAdd, initialData }) => {
       <form onSubmit={handleSubmit} className="note-form">
 
         {!initialData && notes.length > 0 && (
-            <label className="note-form__label">
-              Скопировать из существующей
-              <select className="note-form__input" defaultValue="" onChange={handleCopy}>
-                <option value="" disabled>— выберите заметку —</option>
-                {notes.map(n => (
-                    <option key={n.id} value={n.id}>
-                      {n.type === 'list'
-                          ? `[список] ${n.items[0]?.text ?? ''}`
-                          : n.text.slice(0, 40) + (n.text.length > 40 ? '...' : '')}
-                    </option>
-                ))}
-              </select>
-            </label>
+            <select className="note-form__input" defaultValue="" onChange={handleCopy}>
+              <option value="" disabled>— скопировать из существующей —</option>
+              {notes.map(n => (
+                  <option key={n.id} value={n.id}>
+                    {n.type === 'list'
+                        ? `[список] ${n.items[0]?.text ?? ''}`
+                        : n.text.slice(0, 40) + (n.text.length > 40 ? '...' : '')}
+                  </option>
+              ))}
+            </select>
         )}
 
         <div className="note-form__type-toggle">
@@ -127,7 +124,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ onAdd, initialData }) => {
                   value={text}
                   onChange={e => setText(e.target.value)}
                   placeholder="Введите текст заметки..."
-                  rows={3}
+                  rows={2}
               />
             </label>
         ) : (
@@ -194,7 +191,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ onAdd, initialData }) => {
             />
           </label>
 
-          <label className={`note-form__label note-form__field`}>
+          <label className="note-form__label" style={{width: 'auto'}}>
             Цвет
             <input
                 className="note-form__input note-form__color"
