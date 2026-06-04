@@ -6,15 +6,16 @@ import NoteForm from './components/NoteForm'
 import FilterBar from './components/FilterBar'
 import { NoteList } from './components/NoteList'
 import Modal from './components/Modal'
-import type { SortOption } from './types'
+import type { Note, SortOption } from './types'
 import './App.css'
 
 function App() {
-    const { notes, addNote, togglePin, deleteNote } = useNoteStore()
+    const { notes, addNote, updateNote, togglePin, deleteNote } = useNoteStore()
     const [sortOption, setSortOption] = useState<SortOption>('date')
     const [activeTag, setActiveTag] = useState<string | null>(null)
     const [showForm, setShowForm] = useState(false)
     const [showSettings, setShowSettings] = useState(false)
+    const [editingNote, setEditingNote] = useState<Note | null>(null)
 
     const filteredNotes = activeTag
         ? notes.filter(n => n.tags.includes(activeTag))
@@ -51,6 +52,7 @@ function App() {
                         sortOption={sortOption}
                         onTogglePin={togglePin}
                         onDelete={deleteNote}
+                        onEdit={note => setEditingNote(note)}
                     />
                 </section>
             </main>
@@ -58,6 +60,18 @@ function App() {
             {showForm && (
                 <Modal title="Новая заметка" onClose={() => setShowForm(false)}>
                     <NoteForm onAdd={(data: Parameters<typeof addNote>[0]) => { addNote(data); setShowForm(false) }} />
+                </Modal>
+            )}
+
+            {editingNote && (
+                <Modal title="Редактировать заметку" onClose={() => setEditingNote(null)}>
+                    <NoteForm
+                        initialData={editingNote}
+                        onAdd={(data: Parameters<typeof addNote>[0]) => {
+                            updateNote(editingNote.id, data)
+                            setEditingNote(null)
+                        }}
+                    />
                 </Modal>
             )}
 

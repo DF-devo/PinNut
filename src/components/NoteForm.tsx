@@ -3,14 +3,15 @@ import type { Priority, Note } from '../types';
 
 interface NoteFormProps {
   onAdd: (noteData: Omit<Note, 'id' | 'createdAt' | 'pinned'>) => void;
+  initialData?: Note;
 }
 
-const NoteForm: React.FC<NoteFormProps> = ({ onAdd }) => {
-  const [text, setText] = useState('');
-  const [tagsInput, setTagsInput] = useState('');
-  const [priority, setPriority] = useState<Priority>('medium');
-  const [deadline, setDeadline] = useState('');
-  const [color, setColor] = useState('#7F49B4');
+const NoteForm: React.FC<NoteFormProps> = ({ onAdd, initialData }) => {
+  const [text, setText] = useState(initialData?.text ?? '');
+  const [tagsInput, setTagsInput] = useState(initialData?.tags.join(', ') ?? '');
+  const [priority, setPriority] = useState<Priority>(initialData?.priority ?? 'medium');
+  const [deadline, setDeadline] = useState(initialData?.deadline ?? '');
+  const [color, setColor] = useState(initialData?.color ?? '#7F49B4');
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -155,7 +156,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ onAdd }) => {
       )}
 
       <button type="submit" style={buttonStyle}>
-        Добавить
+        {initialData ? 'Сохранить' : 'Добавить'}
       </button>
     </form>
   );

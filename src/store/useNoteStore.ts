@@ -4,6 +4,7 @@ import type { Note } from '../types'
 interface NoteState {
   notes: Note[];
   addNote: (note: Omit<Note, 'id' | 'createdAt' | 'pinned'>) => void;
+  updateNote: (id: string, data: Omit<Note, 'id' | 'createdAt' | 'pinned'>) => void;
   togglePin: (id: string) => void;
   deleteNote: (id: string) => void;
 }
@@ -34,6 +35,14 @@ export const useNoteStore = create<NoteState>((set) => ({
       pinned: false,
     };
     const newNotes = [newNote, ...state.notes];
+    saveNotes(newNotes);
+    return { notes: newNotes };
+  }),
+
+  updateNote: (id, data) => set((state) => {
+    const newNotes = state.notes.map((n) =>
+      n.id === id ? { ...n, ...data } : n
+    );
     saveNotes(newNotes);
     return { notes: newNotes };
   }),

@@ -8,9 +8,10 @@ interface Props {
     sortOption: SortOption
     onTogglePin: (id: string) => void
     onDelete: (id: string) => void
+    onEdit: (note: Note) => void
 }
 
-export const NoteList = ({ notes, sortOption, onTogglePin, onDelete }: Props) => {
+export const NoteList = ({ notes, sortOption, onTogglePin, onDelete, onEdit }: Props) => {
     const pinned = notes.filter(n => n.pinned)
     const unpinned = notes.filter(n => !n.pinned)
 
@@ -39,6 +40,7 @@ export const NoteList = ({ notes, sortOption, onTogglePin, onDelete }: Props) =>
                     note={note}
                     onTogglePin={onTogglePin}
                     onDelete={onDelete}
+                    onEdit={onEdit}
                 />
             ))}
         </div>

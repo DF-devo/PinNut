@@ -11,9 +11,10 @@ interface Props {
     note: Note
     onTogglePin: (id: string) => void
     onDelete: (id: string) => void
+    onEdit: (note: Note) => void
 }
 
-function NoteCard({ note, onTogglePin, onDelete }: Props) {
+function NoteCard({ note, onTogglePin, onDelete, onEdit }: Props) {
     const [now, setNow] = useState(Date.now)
     const hasDeadline = !!note.deadline
 
@@ -78,6 +79,7 @@ function NoteCard({ note, onTogglePin, onDelete }: Props) {
                 <button className="note-card__btn" onClick={() => onTogglePin(note.id)}>
                     {note.pinned ? '📌' : '📍'}
                 </button>
+                <button className="note-card__btn" onClick={() => onEdit(note)}>✏️</button>
                 <button className="note-card__btn" onClick={() => onDelete(note.id)}>🗑</button>
             </div>
         </div>
