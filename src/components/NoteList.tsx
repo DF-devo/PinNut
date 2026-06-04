@@ -8,14 +8,19 @@ interface Props {
     sortOption: SortOption
     onTogglePin: (id: string) => void
     onDelete: (id: string) => void
+    onEdit: (note: Note) => void
 }
 
-export const NoteList = ({ notes, sortOption, onTogglePin, onDelete }: Props) => {
+export const NoteList = ({ notes, sortOption, onTogglePin, onDelete, onEdit }: Props) => {
     const pinned = notes.filter(n => n.pinned)
     const unpinned = notes.filter(n => !n.pinned)
 
     const sorted = [
-        ...pinned.sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()),
+        ...pinned.sort((a, b) => {
+            const aTime = a.deadline ? new Date(a.deadline).getTime() : Infinity
+            const bTime = b.deadline ? new Date(b.deadline).getTime() : Infinity
+            return aTime - bTime
+        }),
         ...sortNotes(unpinned, sortOption),
     ]
 
@@ -35,6 +40,7 @@ export const NoteList = ({ notes, sortOption, onTogglePin, onDelete }: Props) =>
                     note={note}
                     onTogglePin={onTogglePin}
                     onDelete={onDelete}
+                    onEdit={onEdit}
                 />
             ))}
         </div>
