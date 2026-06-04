@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Priority, Note } from '../types';
+import { useNoteStore } from '../store/useNoteStore';
 
 interface NoteFormProps {
   onAdd: (noteData: Omit<Note, 'id' | 'createdAt' | 'pinned'>) => void;
@@ -7,12 +8,24 @@ interface NoteFormProps {
 }
 
 const NoteForm: React.FC<NoteFormProps> = ({ onAdd, initialData }) => {
+  const notes = useNoteStore((state) => state.notes);
   const [text, setText] = useState(initialData?.text ?? '');
   const [tagsInput, setTagsInput] = useState(initialData?.tags.join(', ') ?? '');
   const [priority, setPriority] = useState<Priority>(initialData?.priority ?? 'medium');
   const [deadline, setDeadline] = useState(initialData?.deadline ?? '');
   const [color, setColor] = useState(initialData?.color ?? '#7F49B4');
   const [error, setError] = useState('');
+
+  const handleCopy = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const note = notes.find(n => n.id === e.target.value);
+    if (!note) return;
+    setText(note.text);
+    setTagsInput(note.tags.join(', '));
+    setPriority(note.priority);
+    setDeadline(note.deadline);
+    setColor(note.color);
+    e.target.value = '';
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,6 +105,20 @@ const NoteForm: React.FC<NoteFormProps> = ({ onAdd, initialData }) => {
 
   return (
     <form onSubmit={handleSubmit} style={formStyle}>
+      {!initialData && notes.length > 0 && (
+        <label style={{ ...labelStyle, marginBottom: 16 }}>
+          Скопировать из существующей
+          <select style={inputStyle} defaultValue="" onChange={handleCopy}>
+            <option value="" disabled>— выберите заметку —</option>
+            {notes.map(n => (
+              <option key={n.id} value={n.id}>
+                {n.text.slice(0, 40)}{n.text.length > 40 ? '...' : ''}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
+
       <label style={labelStyle}>
         Текст заметки*
         <textarea
