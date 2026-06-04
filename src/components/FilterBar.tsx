@@ -15,10 +15,6 @@ const FilterBar: React.FC<FilterBarProps> = ({ activeTag, onTagToggle }) => {
     return Array.from(tagSet).sort((a, b) => a.localeCompare(b));
   }, [notes]);
 
-  if (uniqueTags.length === 0) {
-    return null;
-  }
-
   const containerStyle: React.CSSProperties = {
     display: 'flex',
     flexWrap: 'wrap',
@@ -53,6 +49,16 @@ const FilterBar: React.FC<FilterBarProps> = ({ activeTag, onTagToggle }) => {
   const handleClick = (tag: string) => {
     onTagToggle(tag);
   };
+
+  if (uniqueTags.length === 0) {
+    return (
+      <div style={containerStyle}>
+        <span style={{ color: 'var(--text-primary)', fontSize: '0.85rem', opacity: 0.4 }}>
+          Теги появятся здесь, когда вы добавите заметку с тегами
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div style={containerStyle}>
