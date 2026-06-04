@@ -7,6 +7,7 @@ interface NoteState {
   updateNote: (id: string, data: Omit<Note, 'id' | 'createdAt' | 'pinned'>) => void;
   togglePin: (id: string) => void;
   deleteNote: (id: string) => void;
+  toggleItem: (noteId: string, itemId: string) => void;
 }
 
 const STORAGE_KEY = 'pinnut_notes_v1';
@@ -41,7 +42,7 @@ export const useNoteStore = create<NoteState>((set) => ({
 
   updateNote: (id, data) => set((state) => {
     const newNotes = state.notes.map((n) =>
-      n.id === id ? { ...n, ...data } : n
+        n.id === id ? { ...n, ...data } : n
     );
     saveNotes(newNotes);
     return { notes: newNotes };
@@ -49,7 +50,7 @@ export const useNoteStore = create<NoteState>((set) => ({
 
   togglePin: (id) => set((state) => {
     const newNotes = state.notes.map((n) =>
-      n.id === id ? { ...n, pinned: !n.pinned } : n
+        n.id === id ? { ...n, pinned: !n.pinned } : n
     );
     saveNotes(newNotes);
     return { notes: newNotes };
@@ -57,6 +58,19 @@ export const useNoteStore = create<NoteState>((set) => ({
 
   deleteNote: (id) => set((state) => {
     const newNotes = state.notes.filter((n) => n.id !== id);
+    saveNotes(newNotes);
+    return { notes: newNotes };
+  }),
+
+  // переключение галочки в списке
+  toggleItem: (noteId, itemId) => set((state) => {
+    const newNotes = state.notes.map((n) =>
+        n.id === noteId
+            ? { ...n, items: n.items.map(item =>
+                  item.id === itemId ? { ...item, done: !item.done } : item
+              )}
+            : n
+    );
     saveNotes(newNotes);
     return { notes: newNotes };
   }),

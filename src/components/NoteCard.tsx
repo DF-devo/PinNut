@@ -1,10 +1,11 @@
 // Компонент одной карточки
-
 import { useMemo, useEffect, useState } from 'react'
 import type { Note } from '../types'
+import { useNoteStore } from '../store/useNoteStore'
 import { getTimeIndicator } from '../utils/getTimeIndicator'
 import { getProgressColor } from '../utils/getProgressColor'
 import { formatDeadline } from '../utils/formatDeadline'
+import { sortItems } from '../utils/checklistUtils'
 import '../styles/NoteCard.css'
 
 interface Props {
@@ -15,6 +16,7 @@ interface Props {
 }
 
 function NoteCard({ note, onTogglePin, onDelete, onEdit }: Props) {
+    const toggleItem = useNoteStore(state => state.toggleItem)
     const [now, setNow] = useState(Date.now)
     const hasDeadline = !!note.deadline
 
@@ -45,15 +47,32 @@ function NoteCard({ note, onTogglePin, onDelete, onEdit }: Props) {
         high: 'Высокий'
     }
 
+    const sortedItems = note.items ?? []
+
     return (
         <div className="note-card" style={{ background: note.color }}>
             {hasDeadline && (
                 <div className="note-card__indicator" style={{ background: indicatorColor }} />
             )}
 
-            <p className="note-card__text" style={{ color: isUrgent ? 'var(--indicator-red)' : 'var(--text-primary)' }}>
-                {note.text}
-            </p>
+            {note.type === 'list' ? (
+                <ul className="note-card__checklist">
+                    {sortedItems.map(item => (
+                        <li
+                            key={item.id}
+                            className={`note-card__checklist-item${item.done ? ' note-card__checklist-item--done' : ''}`}
+                            onClick={() => toggleItem(note.id, item.id)}
+                        >
+                            <span className="note-card__checkbox">{item.done ? '☑' : '☐'}</span>
+                            <span className="note-card__checklist-text">{item.text}</span>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p className="note-card__text" style={{ color: isUrgent ? 'var(--indicator-red)' : 'var(--text-primary)' }}>
+                    {note.text}
+                </p>
+            )}
 
             <div className="note-card__tags">
                 {note.tags.map(tag => (

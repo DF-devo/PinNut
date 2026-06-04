@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import './styles/NoteCard.css';
 @import './styles/Modal.css';
+@import './styles/NoteForm.css';
 
 :root {
     --bg-primary: #141414;
