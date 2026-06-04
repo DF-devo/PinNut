@@ -1,4 +1,5 @@
 /* PinNut MVP Palette & Base Styles */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import './styles/NoteCard.css';
 @import './styles/Modal.css';
 
@@ -7,7 +8,7 @@
     --text-primary: #CFCFCF ;
     --ui-border: #7F49B4 ;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --font-main: system-ui, -apple-system, sans-serif;
+    --font-main: 'JetBrains Mono', monospace;
     --indicator-green: #48bb78;
     --indicator-yellow: #f6ad55;
     --indicator-red: #e53e3e;
