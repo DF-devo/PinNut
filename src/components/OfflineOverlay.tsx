@@ -1,4 +1,4 @@
-import corgiGif from '../assets/Welsh Corgi Eating GIF by Lazy Corgi.gif'
+import corgiGif from '../assets/corgi.gif'
 import '../styles/OfflineOverlay.css'
 
 function OfflineOverlay() {
