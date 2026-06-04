@@ -16,6 +16,15 @@ function App() {
     const [showForm, setShowForm] = useState(false)
     const [showSettings, setShowSettings] = useState(false)
     const [editingNote, setEditingNote] = useState<Note | null>(null)
+    const handleDelete = (id: string) => {
+        if (activeTag) {
+            const stillExists = notes
+                .filter(n => n.id !== id)
+                .some(n => n.tags.includes(activeTag))
+            if (!stillExists) setActiveTag(null)
+        }
+        deleteNote(id)
+    }
 
     const filteredNotes = activeTag
         ? notes.filter(n => n.tags.includes(activeTag))
@@ -51,7 +60,7 @@ function App() {
                         notes={filteredNotes}
                         sortOption={sortOption}
                         onTogglePin={togglePin}
-                        onDelete={deleteNote}
+                        onDelete={handleDelete}
                         onEdit={note => setEditingNote(note)}
                     />
                 </section>
