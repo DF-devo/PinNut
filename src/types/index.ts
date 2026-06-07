@@ -18,5 +18,4 @@ export interface Note {
   pinned: boolean;
   createdAt: number;
 }
-
-export type SortOption = 'date' | 'priority';
+export type SortOption = 'date_asc' | 'date_desc' | 'priority_asc' | 'priority_desc';
