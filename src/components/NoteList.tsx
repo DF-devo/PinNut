@@ -1,68 +1,50 @@
-﻿import { useNotesStore } from '../store/useNotesStore';
+﻿// Сетка заметок: сортировка, закреплённые по дедлайну, рендер через NoteCard
+import type { Note, SortOption } from '../types'
+import { sortNotes } from '../utils/sortNotes'
+import NoteCard from './NoteCard'
 
-export const NoteList = () => {
-    const { notes, filters } = useNotesStore();
+interface Props {
+    notes: Note[]
+    sortOption: SortOption
+    onTogglePin: (id: string) => void
+    onDelete: (id: string) => void
+    onEdit: (note: Note) => void
+}
 
-    // Применяем фильтр по тегам и сортировку
-    const filteredAndSortedNotes = notes
-        .filter(note => {
-            if (filters.selectedTags.length === 0) return true;
-            return filters.selectedTags.every(tag => note.tags.includes(tag));
-        })
-        .sort((a, b) => {
-            switch (filters.sortBy) {
-                case 'date-asc':
-                    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-                case 'date-desc':
-                    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-                case 'title-asc':
-                    return a.title.localeCompare(b.title);
-                case 'title-desc':
-                    return b.title.localeCompare(a.title);
-                default:
-                    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-            }
-        });
+export const NoteList = ({ notes, sortOption, onTogglePin, onDelete, onEdit }: Props) => {
+    const pinned = notes.filter(n => n.pinned)
+    const unpinned = notes.filter(n => !n.pinned)
 
-    if (filteredAndSortedNotes.length === 0) {
+    const sorted = [
+        ...pinned.sort((a, b) => {
+            const aTime = a.deadline ? new Date(a.deadline).getTime() : Infinity
+            const bTime = b.deadline ? new Date(b.deadline).getTime() : Infinity
+            return aTime - bTime
+        }),
+        ...sortNotes(unpinned, sortOption),
+    ]
+
+    if (sorted.length === 0) {
         return (
             <div className="empty-state">
                 <p>Нет заметок. Создайте первую!</p>
             </div>
-        );
+        )
     }
 
     return (
         <div className="notes-grid">
-            {filteredAndSortedNotes.map(note => (
-                <div key={note.id} className="note-card">
-                    <div className="note-header">
-                        <h3 className="note-title">{note.title}</h3>
-                        <button
-                            className="delete-button"
-                            onClick={() => useNotesStore.getState().deleteNote(note.id)}
-                            aria-label="Удалить заметку"
-                        >
-                            ×
-                        </button>
-                    </div>
-                    <p className="note-content">{note.content}</p>
-                    <div className="note-tags">
-                        {note.tags.map(tag => (
-                            <button
-                                key={tag}
-                                className="tag"
-                                onClick={() => useNotesStore.getState().toggleTagFilter(tag)}
-                            >
-                                #{tag}
-                            </button>
-                        ))}
-                    </div>
-                    <div className="note-date">
-                        {new Date(note.createdAt).toLocaleDateString('ru-RU')}
-                    </div>
-                </div>
+            {sorted.map(note => (
+                <NoteCard
+                    key={note.id}
+                    note={note}
+                    onTogglePin={onTogglePin}
+                    onDelete={onDelete}
+                    onEdit={onEdit}
+                />
             ))}
         </div>
-    );
-};
+    )
+}
+
+export default NoteList

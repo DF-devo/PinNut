@@ -1,0 +1,56 @@
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 16px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--ui-border);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    align-items: center;
+}
+
+.filter-bar__label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-right: 8px;
+    opacity: 0.7;
+    color: var(--text-primary);
+}
+
+.filter-bar__empty {
+    font-size: 0.85rem;
+    opacity: 0.4;
+    color: var(--text-primary);
+}
+
+.filter-bar__tag {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--ui-border);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background: transparent;
+    color: var(--text-primary);
+}
+
+.filter-bar__tag--active {
+    background-color: var(--text-primary);
+    color: var(--bg-primary);
+    border-color: var(--text-primary);
+}
+
+.filter-bar__reset {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--ui-border);
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background: transparent;
+    color: var(--text-primary);
+    opacity: 0.6;
+}
