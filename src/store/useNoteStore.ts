@@ -1,54 +1,73 @@
 import { create } from 'zustand';
-import { Note } from '../types';
+import { persist } from 'zustand/middleware';
+
+export interface Note {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  createdAt: number;
+  pinned: boolean;  // твоё поле
+}
 
 interface NoteState {
   notes: Note[];
+  filterTags: string[];
+  sortBy: 'date' | 'title';
+  theme: 'light' | 'dark';  // НОВОЕ
   addNote: (note: Omit<Note, 'id' | 'createdAt' | 'pinned'>) => void;
   togglePin: (id: string) => void;
   deleteNote: (id: string) => void;
+  toggleFilterTag: (tag: string) => void;
+  setSortBy: (sort: 'date' | 'title') => void;
+  clearFilters: () => void;
+  toggleTheme: () => void;  // НОВОЕ
 }
 
-const STORAGE_KEY = 'pinnut_notes_v1';
+export const useNoteStore = create<NoteState>()(
+  persist(
+    (set) => ({
+      notes: [],
+      filterTags: [],
+      sortBy: 'date',
+      theme: 'light',  // НОВОЕ
 
-const loadNotes = (): Note[] => {
-  try {
-    const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
-  } catch {
-    return [];
-  }
-};
+      addNote: (noteData) => set((state) => {
+        const newNote: Note = {
+          ...noteData,
+          id: crypto.randomUUID(),
+          createdAt: Date.now(),
+          pinned: false,
+        };
+        return { notes: [newNote, ...state.notes] };
+      }),
 
-const saveNotes = (notes: Note[]) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
-};
+      togglePin: (id) => set((state) => ({
+        notes: state.notes.map((n) =>
+          n.id === id ? { ...n, pinned: !n.pinned } : n
+        )
+      })),
 
-export const useNoteStore = create<NoteState>((set) => ({
-  notes: loadNotes(),
+      deleteNote: (id) => set((state) => ({
+        notes: state.notes.filter((n) => n.id !== id)
+      })),
 
-  addNote: (noteData) => set((state) => {
-    const newNote: Note = {
-      ...noteData,
-      id: crypto.randomUUID(),
-      createdAt: Date.now(),
-      pinned: false,
-    };
-    const newNotes = [newNote, ...state.notes];
-    saveNotes(newNotes);
-    return { notes: newNotes };
-  }),
+      toggleFilterTag: (tag) => set((state) => ({
+        filterTags: state.filterTags.includes(tag)
+          ? state.filterTags.filter((t) => t !== tag)
+          : [...state.filterTags, tag]
+      })),
 
-  togglePin: (id) => set((state) => {
-    const newNotes = state.notes.map((n) =>
-      n.id === id ? { ...n, pinned: !n.pinned } : n
-    );
-    saveNotes(newNotes);
-    return { notes: newNotes };
-  }),
+      setSortBy: (sortBy) => set({ sortBy }),
 
-  deleteNote: (id) => set((state) => {
-    const newNotes = state.notes.filter((n) => n.id !== id);
-    saveNotes(newNotes);
-    return { notes: newNotes };
-  }),
-}));
+      clearFilters: () => set({ filterTags: [] }),
+      
+      toggleTheme: () => set((state) => ({  // НОВОЕ
+        theme: state.theme === 'light' ? 'dark' : 'light'
+      })),
+    }),
+    {
+      name: 'pinnut-storage',
+    }
+  )
+);

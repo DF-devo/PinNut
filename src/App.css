@@ -182,3 +182,68 @@
     border-right-color: var(--border);
   }
 }
+/* ========== ДОБАВЬ ЭТО В КОНЕЦ App.css ========== */
+
+/* CSS переменные для темы */
+:root {
+    --bg-primary: #CFCFCF;
+    --text-primary: #7F49B4;
+    --ui-border: #141414;
+    --bg-card: #e0e0e0;
+    --danger: #e74c3c;
+    --text-color: #333333;
+}
+
+/* Плавный переход */
+* {
+    transition: background-color 0.3s ease, color 0.2s ease;
+}
+
+/* Тёмная тема */
+.dark {
+    --bg-primary: #1a1a2e;
+    --text-primary: #bb86fc;
+    --ui-border: #333333;
+    --bg-card: #2a2a3a;
+    --danger: #cf6679;
+    --text-color: #e0e0e0;
+}
+
+    .dark body {
+        background-color: var(--bg-primary);
+    }
+
+    .dark .app-container {
+        background-color: var(--bg-primary);
+    }
+
+    .dark .note-card {
+        background: var(--bg-card);
+    }
+
+    .dark .note-content {
+        color: var(--text-color);
+    }
+
+    .dark .note-title {
+        color: var(--text-primary);
+    }
+
+    .dark .form-input,
+    .dark .form-textarea {
+        background: #3d3d4a;
+        color: var(--text-color);
+        border-color: var(--ui-border);
+    }
+
+    .dark .filter-bar {
+        background: var(--bg-card);
+    }
+
+    .dark .note-date {
+        color: #888;
+    }
+
+    .dark .note-tag {
+        background: rgba(187, 134, 252, 0.2);
+    }
