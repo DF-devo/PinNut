@@ -3,6 +3,9 @@ import type { Note } from '../types'
 
 interface NoteState {
   notes: Note[];
+  filterTags: string[];
+  sortBy: 'date' | 'title';
+  theme: 'light' | 'dark';  // НОВОЕ
   addNote: (note: Omit<Note, 'id' | 'createdAt' | 'pinned'>) => void;
   updateNote: (id: string, data: Omit<Note, 'id' | 'createdAt' | 'pinned'>) => void;
   togglePin: (id: string) => void;
