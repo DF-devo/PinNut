@@ -1,4 +1,6 @@
-﻿import { useNotesStore } from '../store/useNotesStore';
+﻿import { Pin, PinOff, Trash2, Pencil, Settings } from 'lucide-react';
+
+import { useNotesStore } from '../store/useNotesStore';
 
 export const NoteList = () => {
     const { notes, filters } = useNotesStore();
