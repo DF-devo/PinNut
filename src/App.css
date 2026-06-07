@@ -182,68 +182,71 @@
     border-right-color: var(--border);
   }
 }
-/* ========== ДОБАВЬ ЭТО В КОНЕЦ App.css ========== */
 
-/* CSS переменные для темы */
-:root {
-    --bg-primary: #CFCFCF;
-    --text-primary: #7F49B4;
-    --ui-border: #141414;
-    --bg-card: #e0e0e0;
-    --danger: #e74c3c;
-    --text-color: #333333;
+/* РҐРµРґРµСЂ / app.tsx */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--ui-border);
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
 }
 
-/* Плавный переход */
-* {
-    transition: background-color 0.3s ease, color 0.2s ease;
+.app-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
 }
 
-/* Тёмная тема */
-.dark {
-    --bg-primary: #1a1a2e;
-    --text-primary: #bb86fc;
-    --ui-border: #333333;
-    --bg-card: #2a2a3a;
-    --danger: #cf6679;
-    --text-color: #e0e0e0;
+.app-header__controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-    .dark body {
-        background-color: var(--bg-primary);
-    }
+.app-header__select {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  color: #fff !important;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  width: auto;
+}
 
-    .dark .app-container {
-        background-color: var(--bg-primary);
-    }
+.app-header__select option {
+  background: var(--ui-border);
+  color: #fff;
+}
 
-    .dark .note-card {
-        background: var(--bg-card);
-    }
+.app-header__btn-settings {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+}
 
-    .dark .note-content {
-        color: var(--text-color);
-    }
+.app-header__btn-add {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
 
-    .dark .note-title {
-        color: var(--text-primary);
-    }
-
-    .dark .form-input,
-    .dark .form-textarea {
-        background: #3d3d4a;
-        color: var(--text-color);
-        border-color: var(--ui-border);
-    }
-
-    .dark .filter-bar {
-        background: var(--bg-card);
-    }
-
-    .dark .note-date {
-        color: #888;
-    }
-
-    .dark .note-tag {
-        background: rgba(187, 134, 252, 0.2);
-    }
+.app-header__btn-add:hover,
+.app-header__btn-settings:hover {
+  background: rgba(255, 255, 255, 0.35);
+  color: #fff;
+}

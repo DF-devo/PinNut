@@ -1,10 +1,21 @@
 /* PinNut MVP Palette & Base Styles */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import './styles/NoteCard.css';
+@import './styles/Modal.css';
+@import './styles/NoteForm.css';
+@import './styles/FilterBar.css';
+@import './styles/OfflineOverlay.css';
+
 :root {
     --bg-primary: #141414;
     --text-primary: #CFCFCF ;
     --ui-border: #7F49B4 ;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --font-main: system-ui, -apple-system, sans-serif;
+    --font-main: 'JetBrains Mono', monospace;
+    --indicator-green: #48bb78;
+    --indicator-yellow: #f6ad55;
+    --indicator-red: #e53e3e;
+    --indicator-gray: #808080;
 }
 
 * {
@@ -77,6 +88,7 @@ input:focus, textarea:focus, select:focus {
 .notes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-auto-rows: 1fr;
     gap: 16px;
     margin-top: 24px;
 }
@@ -92,3 +104,4 @@ input:focus, textarea:focus, select:focus {
     margin-right: 4px;
     margin-top: 4px;
 }
+

@@ -1,0 +1,190 @@
+/* Форма создания и редактирования заметки */
+
+.note-form {
+    background: var(--bg-primary);
+    border: 1px solid var(--ui-border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.note-form__label {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.note-form__input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--ui-border);
+    border-radius: 4px;
+    background: #fff;
+    color: #141414;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    margin-top: 4px;
+}
+
+select.note-form__input {
+    margin-bottom: 4px;
+}
+
+.note-form__textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--ui-border);
+    border-radius: 4px;
+    background: #fff;
+    color: #141414;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    margin-top: 4px;
+    min-height: 80px;
+    resize: vertical;
+}
+
+.note-form__type-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.note-form__type-btn {
+    flex: 1;
+    padding: 8px 16px;
+    border: 1px solid var(--ui-border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.note-form__type-btn--active {
+    background: var(--ui-border);
+    color: #fff;
+}
+
+.note-form__add-item {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.note-form__add-item .note-form__input {
+    margin-top: 0;
+}
+
+.note-form__add-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: var(--ui-border);
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.note-form__items {
+    list-style: none;
+    padding: 0;
+    margin-top: 8px;
+}
+
+.note-form__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.note-form__item-text {
+    flex: 1;
+}
+
+.note-form__item-remove {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-primary);
+    opacity: 0.5;
+    font-size: 1rem;
+    padding: 0;
+}
+
+.note-form__item-remove:hover {
+    opacity: 1;
+}
+
+.note-form__fields-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.note-form__field {
+    flex: 1;
+    min-width: 150px;
+}
+
+.note-form__color {
+    width: 40px;
+    height: 34px;
+    padding: 2px 3px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.note-form__error {
+    color: #F44336;
+    font-size: 0.85rem;
+    margin: 8px 0 0;
+}
+
+.note-form__submit {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.note-card__checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.note-card__checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    transition: opacity 0.2s;
+}
+
+.note-card__checklist-item--done .note-card__checklist-text {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.note-card__checkbox {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
