@@ -15,6 +15,7 @@ export const NoteList = ({ notes, sortOption, onTogglePin, onDelete, onEdit }: P
     const pinned = notes.filter(n => n.pinned)
     const unpinned = notes.filter(n => !n.pinned)
 
+    // Закреплённые сортируем только по дедлайну (всегда по возрастанию)
     const sorted = [
         ...pinned.sort((a, b) => {
             const aTime = a.deadline ? new Date(a.deadline).getTime() : Infinity

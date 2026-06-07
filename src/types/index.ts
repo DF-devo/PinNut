@@ -19,4 +19,4 @@ export interface Note {
   createdAt: number;
 }
 
-export type SortOption = 'date' | 'priority';
+export type SortOption = 'date_asc' | 'date_desc' | 'priority_asc' | 'priority_desc' | 'tag_asc' | 'tag_desc';
