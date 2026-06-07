@@ -6,22 +6,17 @@ import FilterBar from './components/FilterBar'
 import { NoteList } from './components/NoteList'
 import Modal from './components/Modal'
 import OfflineOverlay from './components/OfflineOverlay'
-import corgiGif from './assets/corgi.gif'
 import type { Note, SortOption } from './types'
 import './App.css'
 
 function App() {
     const { notes, addNote, updateNote, togglePin, deleteNote } = useNoteStore()
-    const [sortOption, setSortOption] = useState<SortOption>('date')
+    const [sortOption, setSortOption] = useState<SortOption>('date_desc') // Изменено начальное значение
     const [activeTag, setActiveTag] = useState<string | null>(null)
     const [showForm, setShowForm] = useState(false)
     const [showSettings, setShowSettings] = useState(false)
     const [editingNote, setEditingNote] = useState<Note | null>(null)
     const [isOffline, setIsOffline] = useState(!navigator.onLine)
-
-    useEffect(() => {
-        new Image().src = corgiGif
-    }, [])
 
     useEffect(() => {
         const onOffline = () => setIsOffline(true)
@@ -58,8 +53,14 @@ function App() {
                         value={sortOption}
                         onChange={e => setSortOption(e.target.value as SortOption)}
                     >
-                        <option value="date">По дате</option>
-                        <option value="priority">По приоритету</option>
+                        <optgroup label="По дате">
+                            <option value="date_desc">Новые сначала</option>
+                            <option value="date_asc">Старые сначала</option>
+                        </optgroup>
+                        <optgroup label="По приоритету">
+                            <option value="priority_desc">Высокий → Низкий</option>
+                            <option value="priority_asc">Низкий → Высокий</option>
+                        </optgroup>
                     </select>
                     <button className="app-header__btn-settings" onClick={() => setShowSettings(true)}>⚙️</button>
                     <button className="app-header__btn-add" onClick={() => setShowForm(true)}>
