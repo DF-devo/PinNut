@@ -136,7 +136,7 @@ function NoteCard({ note, onTogglePin, onDelete, onEdit }: Props) {
                     ))}
                 </ul>
             ) : (
-                <p className="note-card__text" style={{ color: isUrgent ? 'var(--indicator-red)' : 'var(--text-primary)' }}>
+                <p className="note-card__text" style={{ color: isUrgent ? 'var(--indicator-red)' : 'inherit' }}>
                     {note.text}
                 </p>
             )}

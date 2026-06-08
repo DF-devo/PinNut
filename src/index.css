@@ -104,3 +104,29 @@ input:focus, textarea:focus, select:focus {
     margin-top: 4px;
 }
 
+/* Светлая тема */
+body.light {
+    --bg-primary: #f0eeee;
+    --text-primary: #1a1a1a;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body.light input,
+body.light textarea,
+body.light select {
+    background: #ffffff;
+    color: #1a1a1a;
+}
+
+body.light {
+    --bg-primary: #f0eeee;
+    --text-primary: #1a1a1a;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body.light input,
+body.light textarea,
+body.light select {
+    background: #ffffff;
+    color: #1a1a1a;
+}

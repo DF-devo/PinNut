@@ -8,10 +8,13 @@ import Modal from './components/Modal'
 import OfflineOverlay from './components/OfflineOverlay'
 import type { Note, SortOption } from './types'
 import './App.css'
-import { Settings } from 'lucide-react'
+import { Settings, Sun, Moon } from 'lucide-react'
 
 function App() {
-    const { notes, addNote, updateNote, togglePin, deleteNote } = useNoteStore()
+    const { notes, addNote, updateNote, togglePin, deleteNote, theme, toggleTheme } = useNoteStore()
+    useEffect(() => {
+        document.body.className = theme
+    }, [theme])
     const [sortOption, setSortOption] = useState<SortOption>('date_desc') // Изменено начальное значение
     const [activeTag, setActiveTag] = useState<string | null>(null)
     const [showForm, setShowForm] = useState(false)
@@ -108,12 +111,14 @@ function App() {
 
             {showSettings && (
                 <Modal title="Настройки" onClose={() => setShowSettings(false)}>
-                    <div className="settings-placeholder">
-                        <div className="settings-gears">
-                            <span className="gear-1">⚙️</span>
-                            <span className="gear-2">⚙️</span>
+                    <div className="settings">
+                        <div className="settings__row">
+                            <span className="settings__label">Оформление</span>
+                            <button className="settings__theme-btn" onClick={toggleTheme}>
+                                {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+                                {theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
+                            </button>
                         </div>
-                        <p>Пока в разработке</p>
                     </div>
                 </Modal>
             )}
