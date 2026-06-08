@@ -88,7 +88,6 @@ input:focus, textarea:focus, select:focus {
 .notes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    grid-auto-rows: 1fr;
     gap: 16px;
     margin-top: 24px;
 }
@@ -105,3 +104,29 @@ input:focus, textarea:focus, select:focus {
     margin-top: 4px;
 }
 
+/* Светлая тема */
+body.light {
+    --bg-primary: #f0eeee;
+    --text-primary: #1a1a1a;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body.light input,
+body.light textarea,
+body.light select {
+    background: #ffffff;
+    color: #1a1a1a;
+}
+
+body.light {
+    --bg-primary: #f0eeee;
+    --text-primary: #1a1a1a;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body.light input,
+body.light textarea,
+body.light select {
+    background: #ffffff;
+    color: #1a1a1a;
+}

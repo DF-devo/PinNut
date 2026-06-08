@@ -231,6 +231,9 @@
   padding: 6px 10px;
   font-size: 1rem;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .app-header__btn-add {
@@ -250,3 +253,21 @@
   background: rgba(255, 255, 255, 0.35);
   color: #fff;
 }
+
+.app-header__btn-sort {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.app-header__btn-sort:hover {
+  background: rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+

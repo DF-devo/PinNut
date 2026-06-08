@@ -8,6 +8,8 @@ import type { Note } from '../types'
 
 interface NoteState {
   notes: Note[];
+  theme: 'dark' | 'light';
+  toggleTheme: () => void;
   addNote:         (note: Omit<Note, 'id' | 'createdAt' | 'pinned'>) => void;
   updateNote:      (id: string, data: Omit<Note, 'id' | 'createdAt' | 'pinned'>) => void;
   togglePin:       (id: string) => void;
@@ -17,6 +19,12 @@ interface NoteState {
 }
 
 const STORAGE_KEY = 'pinnut_notes_v1';
+
+const THEME_KEY = 'pinnut_theme'
+const loadTheme = (): 'dark' | 'light' => {
+  const saved = localStorage.getItem(THEME_KEY)
+  return saved === 'light' ? 'light' : 'dark'
+}
 
 // Загрузка заметок из localStorage при старте приложения
 const loadNotes = (): Note[] => {
@@ -35,6 +43,15 @@ const saveNotes = (notes: Note[]) => {
 
 export const useNoteStore = create<NoteState>((set) => ({
   notes: loadNotes(),
+
+  theme: loadTheme(),
+
+  // Переключает тему и сохраняет в localStorage
+  toggleTheme: () => set((state) => {
+    const next = state.theme === 'dark' ? 'light' : 'dark'
+    localStorage.setItem(THEME_KEY, next)
+    return { theme: next }
+  }),
 
   // Создаёт новую заметку с уникальным id и текущим временем
   addNote: (noteData) => set((state) => {
