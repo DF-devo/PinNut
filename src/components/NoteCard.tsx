@@ -116,7 +116,8 @@ function NoteCard({ note, onTogglePin, onDelete, onEdit }: Props) {
     return (
         <div className="note-card" style={{ background: note.color }}>
             {hasDeadline && (
-                <div className="note-card__indicator" style={{ background: indicatorColor }}
+                <div className="note-card__indicator" style={{ background: indicatorColor }} />
+            )}
 
             {note.type === 'list' ? (
                 <ul className="note-card__checklist">
