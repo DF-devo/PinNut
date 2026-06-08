@@ -1,18 +1,32 @@
+
+
+// Глобальный стор заметок на Zustand.
+// Все изменения автоматически сохраняются в localStorage.
+
 import { create } from 'zustand';
 import type { Note } from '../types'
 
 interface NoteState {
   notes: Note[];
-  addNote: (note: Omit<Note, 'id' | 'createdAt' | 'pinned'>) => void;
-  updateNote: (id: string, data: Omit<Note, 'id' | 'createdAt' | 'pinned'>) => void;
-  togglePin: (id: string) => void;
-  deleteNote: (id: string) => void;
-  toggleItem: (noteId: string, itemId: string) => void;
-  reorderNoteItems: (noteId: string, fromIndex: number, toIndex: number) => void;
+  theme: 'dark' | 'light';
+  toggleTheme: () => void;
+  addNote:         (note: Omit<Note, 'id' | 'createdAt' | 'pinned'>) => void;
+  updateNote:      (id: string, data: Omit<Note, 'id' | 'createdAt' | 'pinned'>) => void;
+  togglePin:       (id: string) => void;
+  deleteNote:      (id: string) => void;
+  toggleItem:      (noteId: string, itemId: string) => void;
+  reorderNoteItems:(noteId: string, fromIndex: number, toIndex: number) => void;
 }
 
 const STORAGE_KEY = 'pinnut_notes_v1';
 
+const THEME_KEY = 'pinnut_theme'
+const loadTheme = (): 'dark' | 'light' => {
+  const saved = localStorage.getItem(THEME_KEY)
+  return saved === 'light' ? 'light' : 'dark'
+}
+
+// Загрузка заметок из localStorage при старте приложения
 const loadNotes = (): Note[] => {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
@@ -22,6 +36,7 @@ const loadNotes = (): Note[] => {
   }
 };
 
+// Сохранение всего массива заметок в localStorage
 const saveNotes = (notes: Note[]) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
 };
@@ -29,6 +44,16 @@ const saveNotes = (notes: Note[]) => {
 export const useNoteStore = create<NoteState>((set) => ({
   notes: loadNotes(),
 
+  theme: loadTheme(),
+
+  // Переключает тему и сохраняет в localStorage
+  toggleTheme: () => set((state) => {
+    const next = state.theme === 'dark' ? 'light' : 'dark'
+    localStorage.setItem(THEME_KEY, next)
+    return { theme: next }
+  }),
+
+  // Создаёт новую заметку с уникальным id и текущим временем
   addNote: (noteData) => set((state) => {
     const newNote: Note = {
       ...noteData,
@@ -41,6 +66,7 @@ export const useNoteStore = create<NoteState>((set) => ({
     return { notes: newNotes };
   }),
 
+  // Обновляет поля существующей заметки по id
   updateNote: (id, data) => set((state) => {
     const newNotes = state.notes.map((n) =>
         n.id === id ? { ...n, ...data } : n
@@ -49,6 +75,7 @@ export const useNoteStore = create<NoteState>((set) => ({
     return { notes: newNotes };
   }),
 
+  // Переключает закрепление заметки
   togglePin: (id) => set((state) => {
     const newNotes = state.notes.map((n) =>
         n.id === id ? { ...n, pinned: !n.pinned } : n
@@ -57,12 +84,15 @@ export const useNoteStore = create<NoteState>((set) => ({
     return { notes: newNotes };
   }),
 
+  // Удаляет заметку по id
   deleteNote: (id) => set((state) => {
     const newNotes = state.notes.filter((n) => n.id !== id);
     saveNotes(newNotes);
     return { notes: newNotes };
   }),
 
+  // Переключает галочку пункта списка.
+  // Если пункт становится выполненным — уходит вниз (сортировка: невыполненные сверху).
   toggleItem: (noteId, itemId) => set((state) => {
     const newNotes = state.notes.map((n) => {
       if (n.id !== noteId) return n;
@@ -83,6 +113,7 @@ export const useNoteStore = create<NoteState>((set) => ({
     return { notes: newNotes };
   }),
 
+  // Меняет порядок пунктов списка (drag & drop)
   reorderNoteItems: (noteId, fromIndex, toIndex) => set((state) => {
     const newNotes = state.notes.map((n) => {
       if (n.id !== noteId) return n;

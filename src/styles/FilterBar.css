@@ -22,6 +22,7 @@
     font-size: 0.85rem;
     opacity: 0.4;
     color: var(--text-primary);
+    cursor: default;
 }
 
 .filter-bar__tag {

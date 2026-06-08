@@ -1,3 +1,7 @@
+// Панель фильтрации по тегам
+// Теги собираются из всех заметок через useMemo,
+// дубли исключаются автоматически
+
 import React, { useMemo } from 'react'
 import { useNoteStore } from '../store/useNoteStore'
 import '../styles/FilterBar.css'
@@ -10,6 +14,7 @@ interface FilterBarProps {
 const FilterBar: React.FC<FilterBarProps> = ({ activeTag, onTagToggle }) => {
   const notes = useNoteStore((state) => state.notes)
 
+    // Собираем уникальные теги из всех заметок, сортируем по алфавиту
   const uniqueTags = useMemo(() => {
     const tagSet = new Set<string>()
     notes.forEach((note) => note.tags.forEach((tag) => tagSet.add(tag)))
