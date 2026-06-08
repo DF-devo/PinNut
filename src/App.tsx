@@ -8,14 +8,25 @@ import Modal from './components/Modal'
 import OfflineOverlay from './components/OfflineOverlay'
 import type { Note, SortOption } from './types'
 import './App.css'
-import { Settings, Sun, Moon } from 'lucide-react'
+import { Settings, Sun, Moon, ArrowDownNarrowWide, ArrowUpNarrowWide } from 'lucide-react'
 
 function App() {
     const { notes, addNote, updateNote, togglePin, deleteNote, theme, toggleTheme } = useNoteStore()
     useEffect(() => {
         document.body.className = theme
     }, [theme])
-    const [sortOption, setSortOption] = useState<SortOption>('date_desc') // Изменено начальное значение
+    const [sortOption, setSortOption] = useState<SortOption>('date_desc')
+    const isDesc = sortOption.endsWith('_desc')
+
+    const toggleSortDir = () => {
+        const [type, dir] = sortOption.split('_')
+        setSortOption(`${type}_${dir === 'desc' ? 'asc' : 'desc'}` as SortOption)
+    }
+
+    const handleSortType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const dir = sortOption.split('_')[1]
+        setSortOption(`${e.target.value}_${dir}` as SortOption)
+    }
     const [activeTag, setActiveTag] = useState<string | null>(null)
     const [showForm, setShowForm] = useState(false)
     const [showSettings, setShowSettings] = useState(false)
@@ -52,19 +63,23 @@ function App() {
             <header className="app-header">
                 <h1 className="app-title">🥜 PinNut</h1>
                 <div className="app-header__controls">
+                    <button
+                        className="app-header__btn-sort"
+                        onClick={toggleSortDir}
+                        title={isDesc ? 'По убыванию' : 'По возрастанию'}
+                    >
+                        {isDesc
+                            ? <ArrowDownNarrowWide size={16} />
+                            : <ArrowUpNarrowWide size={16} />
+                        }
+                    </button>
                     <select
                         className="app-header__select"
-                        value={sortOption}
-                        onChange={e => setSortOption(e.target.value as SortOption)}
+                        value={sortOption.split('_')[0]}
+                        onChange={handleSortType}
                     >
-                        <optgroup label="По дате">
-                            <option value="date_desc">Новые сначала</option>
-                            <option value="date_asc">Старые сначала</option>
-                        </optgroup>
-                        <optgroup label="По приоритету">
-                            <option value="priority_desc">Высокий → Низкий</option>
-                            <option value="priority_asc">Низкий → Высокий</option>
-                        </optgroup>
+                        <option value="date">По дате</option>
+                        <option value="priority">По приоритету</option>
                     </select>
                     <button className="app-header__btn-settings" onClick={() => setShowSettings(true)}>
                         <Settings size={18} />
