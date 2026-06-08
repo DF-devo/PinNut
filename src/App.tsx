@@ -8,6 +8,7 @@ import Modal from './components/Modal'
 import OfflineOverlay from './components/OfflineOverlay'
 import type { Note, SortOption } from './types'
 import './App.css'
+import { Settings } from 'lucide-react'
 
 function App() {
     const { notes, addNote, updateNote, togglePin, deleteNote } = useNoteStore()
@@ -62,7 +63,9 @@ function App() {
                             <option value="priority_asc">Низкий → Высокий</option>
                         </optgroup>
                     </select>
-                    <button className="app-header__btn-settings" onClick={() => setShowSettings(true)}>⚙️</button>
+                    <button className="app-header__btn-settings" onClick={() => setShowSettings(true)}>
+                        <Settings size={18} />
+                    </button>
                     <button className="app-header__btn-add" onClick={() => setShowForm(true)}>
                         + Заметка
                     </button>

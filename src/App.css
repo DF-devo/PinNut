@@ -231,6 +231,9 @@
   padding: 6px 10px;
   font-size: 1rem;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .app-header__btn-add {

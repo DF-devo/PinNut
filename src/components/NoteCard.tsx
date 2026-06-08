@@ -9,46 +9,47 @@ import { useNoteStore } from '../store/useNoteStore'
 import { getTimeIndicator } from '../utils/getTimeIndicator'
 import { getProgressColor } from '../utils/getProgressColor'
 import { formatDeadline } from '../utils/formatDeadline'
+import { Pin, PinOff, Pencil, Trash2 } from 'lucide-react'
 import '../styles/NoteCard.css'
 
 interface Props {
     note: Note
     onTogglePin: (id: string) => void
-    onDelete: (id: string) => void
-    onEdit: (note: Note) => void
+    onDelete:    (id: string) => void
+    onEdit:      (note: Note) => void
 }
 
 function NoteCard({ note, onTogglePin, onDelete, onEdit }: Props) {
-    const toggleItem = useNoteStore(state => state.toggleItem)
+    const toggleItem       = useNoteStore(state => state.toggleItem)
     const reorderNoteItems = useNoteStore(state => state.reorderNoteItems)
-    const [now, setNow] = useState(Date.now)
-    const hasDeadline = !!note.deadline
+    const [now, setNow]    = useState(Date.now)
+    const hasDeadline      = !!note.deadline
 
-    const itemRefs = useRef<Map<string, HTMLLIElement>>(new Map())
+    const itemRefs     = useRef<Map<string, HTMLLIElement>>(new Map())
     const prevRectsRef = useRef<Map<string, DOMRect>>(new Map())
-    const dragIndex = useRef<number | null>(null)
+    const dragIndex    = useRef<number | null>(null)
     const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
 
-    // Таймер обновления времени — только если есть дедлайн
     useEffect(() => {
         if (!hasDeadline) return
         const timer = setInterval(() => setNow(Date.now()), 1000)
         return () => clearInterval(timer)
     }, [hasDeadline])
 
+    // FLIP-анимация: фиксируем позиции → после рендера считаем дельту → анимируем
     useLayoutEffect(() => {
         if (prevRectsRef.current.size === 0) return
         itemRefs.current.forEach((el, id) => {
             const prev = prevRectsRef.current.get(id)
             if (!prev) return
             const current = el.getBoundingClientRect()
-            const deltaY = prev.top - current.top
+            const deltaY  = prev.top - current.top
             if (Math.abs(deltaY) > 1) {
-                el.style.transform = `translateY(${deltaY}px)`
+                el.style.transform  = `translateY(${deltaY}px)`
                 el.style.transition = 'none'
                 requestAnimationFrame(() => {
                     requestAnimationFrame(() => {
-                        el.style.transform = ''
+                        el.style.transform  = ''
                         el.style.transition = 'transform 0.35s cubic-bezier(0.2, 0, 0, 1)'
                     })
                 })
@@ -63,50 +64,27 @@ function NoteCard({ note, onTogglePin, onDelete, onEdit }: Props) {
         })
     }
 
-    const handleItemClick = (itemId: string) => {
-        snapshotPositions()
-        toggleItem(note.id, itemId)
-    }
-
-    const handleDragStart = (index: number) => {
-        dragIndex.current = index
-    }
-
-    const handleDragOver = (e: React.DragEvent, index: number) => {
-        e.preventDefault()
-        setDragOverIndex(index)
-    }
+    const handleItemClick  = (itemId: string) => { snapshotPositions(); toggleItem(note.id, itemId) }
+    const handleDragStart  = (index: number) => { dragIndex.current = index }
+    const handleDragOver   = (e: React.DragEvent, index: number) => { e.preventDefault(); setDragOverIndex(index) }
+    const handleDragEnd    = () => { dragIndex.current = null; setDragOverIndex(null) }
 
     const handleDrop = (index: number) => {
-        if (dragIndex.current === null || dragIndex.current === index) {
-            setDragOverIndex(null)
-            return
-        }
+        if (dragIndex.current === null || dragIndex.current === index) { setDragOverIndex(null); return }
         snapshotPositions()
         reorderNoteItems(note.id, dragIndex.current, index)
         dragIndex.current = null
         setDragOverIndex(null)
     }
 
-    const handleDragEnd = () => {
-        dragIndex.current = null
-        setDragOverIndex(null)
-    }
-
-    // Флаг срочности — дедлайн менее чем через 24 часа
-    const isUrgent = useMemo(() =>
-            hasDeadline && new Date(note.deadline).getTime() - now < 24 * 60 * 60 * 1000,
-        [hasDeadline, note.deadline, now]
-    )
-
+    const isUrgent       = useMemo(() => hasDeadline && new Date(note.deadline).getTime() - now < 24 * 60 * 60 * 1000, [hasDeadline, note.deadline, now])
     const indicatorColor = useMemo(() => hasDeadline ? getTimeIndicator(note.deadline, now) : undefined, [hasDeadline, note.deadline, now])
-    const progressColor = useMemo(() => hasDeadline ? getProgressColor(note.createdAt, note.deadline, now) : undefined, [hasDeadline, note.createdAt, note.deadline, now])
-    const deadlineText = useMemo(() => hasDeadline ? formatDeadline(note.deadline, now) : undefined, [hasDeadline, note.deadline, now])
+    const progressColor  = useMemo(() => hasDeadline ? getProgressColor(note.createdAt, note.deadline, now) : undefined, [hasDeadline, note.createdAt, note.deadline, now])
+    const deadlineText   = useMemo(() => hasDeadline ? formatDeadline(note.deadline, now) : undefined, [hasDeadline, note.deadline, now])
 
-    // Процент заполнения прогресс-бара (0–100)
     const progressPercent = useMemo(() => {
         if (!hasDeadline) return 0
-        const total = new Date(note.deadline).getTime() - note.createdAt
+        const total   = new Date(note.deadline).getTime() - note.createdAt
         const elapsed = now - note.createdAt
         return Math.min(Math.max(elapsed / total * 100, 0), 100)
     }, [hasDeadline, note.deadline, note.createdAt, now])
@@ -115,10 +93,21 @@ function NoteCard({ note, onTogglePin, onDelete, onEdit }: Props) {
 
     return (
         <div className="note-card" style={{ background: note.color }}>
+
+            {/* Полоска срочности — левая сторона */}
             {hasDeadline && (
                 <div className="note-card__indicator" style={{ background: indicatorColor }} />
             )}
 
+            {/* Кнопка закрепления — правый верхний угол */}
+            <button
+                className={`note-card__pin-btn${note.pinned ? ' note-card__pin-btn--active' : ''}`}
+                onClick={() => onTogglePin(note.id)}
+            >
+                {note.pinned ? <Pin size={14} /> : <PinOff size={14} />}
+            </button>
+
+            {/* Контент */}
             {note.type === 'list' ? (
                 <ul className="note-card__checklist">
                     {(note.items ?? []).map((item, index) => (
@@ -153,9 +142,7 @@ function NoteCard({ note, onTogglePin, onDelete, onEdit }: Props) {
             )}
 
             <div className="note-card__tags">
-                {note.tags.map(tag => (
-                    <span className="tag" key={tag}>{tag}</span>
-                ))}
+                {note.tags.map(tag => <span className="tag" key={tag}>{tag}</span>)}
             </div>
 
             <span className="note-card__priority">{priorityLabels[note.priority]}</span>
@@ -164,21 +151,21 @@ function NoteCard({ note, onTogglePin, onDelete, onEdit }: Props) {
                 <>
                     <span className="note-card__deadline">{deadlineText}</span>
                     <div className="note-card__progress-track">
-                        <div
-                            className="note-card__progress"
-                            style={{ width: `${progressPercent}%`, background: progressColor }}
-                        />
+                        <div className="note-card__progress" style={{ width: `${progressPercent}%`, background: progressColor }} />
                     </div>
                 </>
             )}
 
+            {/* Редактировать и удалить — появляются при наведении */}
             <div className="note-card__actions">
-                <button className="note-card__btn" onClick={() => onTogglePin(note.id)}>
-                    {note.pinned ? '📌' : '📍'}
+                <button className="note-card__btn" onClick={() => onEdit(note)}>
+                    <Pencil size={16} />
                 </button>
-                <button className="note-card__btn" onClick={() => onEdit(note)}>✏️</button>
-                <button className="note-card__btn" onClick={() => onDelete(note.id)}>🗑</button>
+                <button className="note-card__btn" onClick={() => onDelete(note.id)}>
+                    <Trash2 size={16} />
+                </button>
             </div>
+
         </div>
     )
 }
