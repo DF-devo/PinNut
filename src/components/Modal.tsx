@@ -1,4 +1,5 @@
-// Переиспользуемое модальное окно: затемнение фона + кнопка закрытия справа сверху
+// Переиспользуемое модальное окно:
+// затемнение фона + закрывается по клику на кнопку
 import { useState, type ReactNode } from 'react'
 
 interface ModalProps {
@@ -10,6 +11,7 @@ interface ModalProps {
 function Modal({ title, onClose, children }: ModalProps) {
     const [isClosing, setIsClosing] = useState(false)
 
+    // Запускает анимацию закрытия, затем вызывает onClose
     const handleClose = () => {
         setIsClosing(true)
         setTimeout(() => {

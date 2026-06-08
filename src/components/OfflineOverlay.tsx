@@ -1,3 +1,7 @@
+// Оверлей поверх приложения при отсутствии интернета.
+// Появляется автоматически
+// состояние управляется в App.tsx через navigator.onLine
+
 import corgiGif from '../assets/corgi.gif'
 import '../styles/OfflineOverlay.css'
 

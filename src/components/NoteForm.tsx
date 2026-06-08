@@ -1,3 +1,7 @@
+// Форма создания и редактирования заметки.
+// initialData - режим редактирования
+// иначе - создание
+
 import React, { useState } from 'react';
 import type { Priority, Note } from '../types';
 import { useNoteStore } from '../store/useNoteStore';
@@ -20,7 +24,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ onAdd, initialData }) => {
   const [deadline, setDeadline] = useState(initialData?.deadline ?? '');
   const [color, setColor] = useState(initialData?.color ?? '#7F49B4');
   const [error, setError] = useState('');
-
+// Добавляет новый пункт в список
   const handleAddItem = () => {
     const trimmed = itemInput.trim();
     if (!trimmed) return;
@@ -31,7 +35,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ onAdd, initialData }) => {
   const handleRemoveItem = (id: string) => {
     setItems(prev => prev.filter(i => i.id !== id));
   };
-
+// Копирует поля из выбранной существующей заметки в форму
   const handleCopy = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const note = notes.find(n => n.id === e.target.value);
     if (!note) return;
@@ -57,7 +61,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ onAdd, initialData }) => {
       setError('Добавьте хотя бы один пункт');
       return;
     }
-
+// Теги — строка через запятую → массив
     const tags = tagsInput
         .split(',')
         .map(t => t.trim())
@@ -72,7 +76,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ onAdd, initialData }) => {
       priority,
       deadline,
     });
-
+// Сброс формы после отправки
     setText('');
     setItems([]);
     setItemInput('');
@@ -83,6 +87,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ onAdd, initialData }) => {
     setType('text');
   };
 
+  // Копирование из существующей заметки — только при создании
   return (
       <form onSubmit={handleSubmit} className="note-form">
 

@@ -1,4 +1,5 @@
-﻿// Сетка заметок: сортировка, закреплённые по дедлайну, рендер через NoteCard
+﻿// Сетка заметок: сортировка,
+// закреплённые по дедлайну, рендер через NoteCard
 import type { Note, SortOption } from '../types'
 import { sortNotes } from '../utils/sortNotes'
 import NoteCard from './NoteCard'
@@ -15,6 +16,7 @@ export const NoteList = ({ notes, sortOption, onTogglePin, onDelete, onEdit }: P
     const pinned = notes.filter(n => n.pinned)
     const unpinned = notes.filter(n => !n.pinned)
 
+    // Закреплённые — по ближайшему дедлайну, незакреплённые — по sortOption
     const sorted = [
         ...pinned.sort((a, b) => {
             const aTime = a.deadline ? new Date(a.deadline).getTime() : Infinity

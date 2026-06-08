@@ -1,3 +1,8 @@
+// Карточка заметки
+// отображение данных
+// чеклист с анимацией и перетаскиванием
+// прогресс-бар дедлайна, индикатор срочности, кнопки действий
+
 import { useMemo, useEffect, useState, useRef, useLayoutEffect } from 'react'
 import type { Note } from '../types'
 import { useNoteStore } from '../store/useNoteStore'
@@ -24,6 +29,7 @@ function NoteCard({ note, onTogglePin, onDelete, onEdit }: Props) {
     const dragIndex = useRef<number | null>(null)
     const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
 
+    // Таймер обновления времени — только если есть дедлайн
     useEffect(() => {
         if (!hasDeadline) return
         const timer = setInterval(() => setNow(Date.now()), 1000)
@@ -87,6 +93,7 @@ function NoteCard({ note, onTogglePin, onDelete, onEdit }: Props) {
         setDragOverIndex(null)
     }
 
+    // Флаг срочности — дедлайн менее чем через 24 часа
     const isUrgent = useMemo(() =>
             hasDeadline && new Date(note.deadline).getTime() - now < 24 * 60 * 60 * 1000,
         [hasDeadline, note.deadline, now]
@@ -96,6 +103,7 @@ function NoteCard({ note, onTogglePin, onDelete, onEdit }: Props) {
     const progressColor = useMemo(() => hasDeadline ? getProgressColor(note.createdAt, note.deadline, now) : undefined, [hasDeadline, note.createdAt, note.deadline, now])
     const deadlineText = useMemo(() => hasDeadline ? formatDeadline(note.deadline, now) : undefined, [hasDeadline, note.deadline, now])
 
+    // Процент заполнения прогресс-бара (0–100)
     const progressPercent = useMemo(() => {
         if (!hasDeadline) return 0
         const total = new Date(note.deadline).getTime() - note.createdAt
@@ -108,8 +116,7 @@ function NoteCard({ note, onTogglePin, onDelete, onEdit }: Props) {
     return (
         <div className="note-card" style={{ background: note.color }}>
             {hasDeadline && (
-                <div className="note-card__indicator" style={{ background: indicatorColor }} />
-            )}
+                <div className="note-card__indicator" style={{ background: indicatorColor }}
 
             {note.type === 'list' ? (
                 <ul className="note-card__checklist">
