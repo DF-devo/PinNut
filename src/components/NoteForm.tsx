@@ -115,7 +115,14 @@ const NoteForm: React.FC<NoteFormProps> = ({ onAdd, initialData }) => {
           <button
               type="button"
               className={`note-form__type-btn${type === 'list' ? ' note-form__type-btn--active' : ''}`}
-              onClick={() => setType('list')}
+              // текст при создании заметки перенесется в список(первый пункт)
+              onClick={() => {
+                if (text.trim()) {
+                  setItemInput(text.trim())
+                  setText('')
+                }
+                setType('list')
+              }}
           >
             Список
           </button>
